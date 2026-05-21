@@ -1,0 +1,42 @@
+WEBSITE LINK -
+
+
+
+
+🛠️ Installation & Setup
+Prerequisites
+Make sure you have Node.js installed on your machine.
+
+Execution Steps
+Clone or extract this project folder into your local working directory.
+
+Open your terminal or command prompt and navigate to the project directory:
+
+Bash
+cd path/to/zombie-shooter
+Install the development web server dependencies:
+
+Bash
+npm install
+Fire up the local secure-context development environment:
+
+Bash
+npm run dev
+Your browser should instantly launch http://localhost:3000 (or http://127.0.0.1:3000).
+
+⚠️ Critical Camera Permissions Note
+Since webcams strictly require a Secure Context, you must always run the project through localhost or 127.0.0.1. Clicking the index.html file directly from a file directory will prevent the camera from initializing. Be sure to hit "Allow" when the web browser requests camera access!
+
+⚡ Tech Stack
+Core Engine: Vanilla HTML5 Canvas 2D API
+
+AI Processing: MediaPipe Hands Model v0.4
+
+Style Preprocessor: Native CSS Custom Properties (Variables) & Keyframe Engines
+
+Environment Server: Live Server Ecosystem (ES Module Compliant Native CORS)
+"""
+
+
+Made by Sahil kund 
+Email Id - skund97@gmail.com

@@ -1,0 +1,393 @@
+/* ═══════════════════════════════════════════════════════════
+   DEAD HANDS — ZOMBIE SHOOTER STYLES
+   Theme: Dark military-horror, monochrome-green on black
+═══════════════════════════════════════════════════════════ */
+
+:root {
+  --blood:      #cc0000;
+  --blood-dark: #880000;
+  --green:      #00ff88;
+  --green-dim:  #005533;
+  --yellow:     #ffdd00;
+  --orange:     #ff8800;
+  --bg:         #050505;
+  --panel:      rgba(0, 0, 0, 0.82);
+  --border:     rgba(0, 255, 136, 0.3);
+  --font-horror: 'Creepster', cursive;
+  --font-hud:   'Share Tech Mono', monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  width: 100%; height: 100%;
+  overflow: hidden;
+  background: var(--bg);
+  font-family: var(--font-hud);
+  cursor: none;
+  user-select: none;
+}
+
+/* ── Canvas ──────────────────────────────────────────────── */
+#gameCanvas {
+  position: fixed; inset: 0;
+  width: 100%; height: 100%;
+  display: block;
+  z-index: 0;
+}
+
+/* ── Hidden webcam ───────────────────────────────────────── */
+#webcam {
+  position: fixed;
+  width: 1px; height: 1px;
+  opacity: 0; pointer-events: none;
+  top: -9999px;
+}
+
+.hidden { display: none !important; }
+
+/* ══════════════════════════════════════════════════════════
+   LOADING SCREEN
+══════════════════════════════════════════════════════════ */
+#loadingScreen {
+  position: fixed; inset: 0; z-index: 100;
+  background: var(--bg);
+  display: flex; align-items: center; justify-content: center;
+}
+
+.load-content { text-align: center; width: 380px; }
+
+.load-title {
+  font-family: var(--font-horror);
+  font-size: 4rem;
+  color: var(--blood);
+  text-shadow: 0 0 30px var(--blood-dark), 0 0 60px #550000;
+  letter-spacing: 6px;
+  margin-bottom: 1rem;
+  animation: flicker 2s infinite;
+}
+
+.load-sub {
+  color: var(--green);
+  font-size: 0.85rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 2rem;
+}
+
+.load-bar-wrap {
+  width: 100%; height: 6px;
+  background: #111;
+  border: 1px solid var(--green-dim);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.load-bar {
+  height: 100%; width: 0%;
+  background: linear-gradient(90deg, var(--green-dim), var(--green));
+  transition: width 0.4s ease;
+  box-shadow: 0 0 8px var(--green);
+}
+
+.load-tip {
+  color: #666;
+  font-size: 0.75rem;
+  letter-spacing: 1px;
+}
+
+/* ══════════════════════════════════════════════════════════
+   START SCREEN
+══════════════════════════════════════════════════════════ */
+#startScreen {
+  position: fixed; inset: 0; z-index: 90;
+  background: radial-gradient(ellipse at center, #0d0d0d 0%, #000 100%);
+  display: flex; align-items: center; justify-content: center;
+}
+
+.start-content { text-align: center; max-width: 640px; padding: 2rem; }
+
+.game-title {
+  font-family: var(--font-horror);
+  font-size: clamp(3rem, 8vw, 6rem);
+  color: var(--blood);
+  text-shadow: 0 0 40px var(--blood), 0 0 80px #550000;
+  letter-spacing: 8px;
+  margin-bottom: 0.3rem;
+  animation: flicker 3s infinite;
+}
+
+.game-subtitle {
+  color: var(--green);
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  margin-bottom: 2.5rem;
+}
+
+.gesture-guide {
+  border: 1px solid var(--border);
+  background: rgba(0,255,136,0.03);
+  padding: 1.5rem;
+  border-radius: 4px;
+  margin-bottom: 2rem;
+}
+
+.gesture-guide h3 {
+  color: var(--green);
+  font-size: 0.8rem;
+  letter-spacing: 4px;
+  margin-bottom: 1.2rem;
+}
+
+.gesture-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.gesture-item {
+  display: flex; align-items: center; gap: 0.8rem;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.07);
+  padding: 0.8rem;
+  border-radius: 4px;
+  text-align: left;
+}
+
+.gesture-icon { font-size: 1.8rem; flex-shrink: 0; }
+
+.gesture-item span { color: #aaa; font-size: 0.78rem; line-height: 1.5; }
+.gesture-item b { color: var(--green); }
+
+.start-btn {
+  font-family: var(--font-horror);
+  font-size: 1.5rem;
+  letter-spacing: 4px;
+  color: var(--blood);
+  background: transparent;
+  border: 2px solid var(--blood);
+  padding: 0.9rem 2.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-transform: uppercase;
+  position: relative;
+  overflow: hidden;
+}
+
+.start-btn::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: var(--blood);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 0.25s ease;
+  z-index: -1;
+}
+
+.start-btn:hover::before { transform: scaleX(1); }
+.start-btn:hover { color: #fff; box-shadow: 0 0 30px var(--blood); }
+
+.cam-note {
+  color: #444; font-size: 0.7rem;
+  margin-top: 1rem;
+  letter-spacing: 1px;
+}
+
+/* ══════════════════════════════════════════════════════════
+   GAME OVER SCREEN
+══════════════════════════════════════════════════════════ */
+#gameOverScreen {
+  position: fixed; inset: 0; z-index: 90;
+  background: rgba(0,0,0,0.92);
+  display: flex; align-items: center; justify-content: center;
+  backdrop-filter: blur(4px);
+}
+
+.gameover-content { text-align: center; }
+
+.gameover-title {
+  font-family: var(--font-horror);
+  font-size: clamp(4rem, 12vw, 8rem);
+  color: var(--blood);
+  text-shadow: 0 0 60px var(--blood);
+  animation: pulse-blood 1s infinite;
+  margin-bottom: 1rem;
+}
+
+.gameover-score, .gameover-wave {
+  color: var(--green);
+  font-size: 1.2rem;
+  letter-spacing: 3px;
+  margin-bottom: 0.5rem;
+}
+
+.gameover-score span, .gameover-wave span {
+  color: var(--yellow);
+  font-size: 1.6rem;
+}
+
+/* ══════════════════════════════════════════════════════════
+   HUD
+══════════════════════════════════════════════════════════ */
+#hud {
+  position: fixed; inset: 0;
+  z-index: 10;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 16px 20px;
+  pointer-events: none;
+}
+
+#hudLeft, #hudRight {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  padding: 12px 16px;
+  border-radius: 4px;
+  min-width: 110px;
+}
+
+.hud-label {
+  color: #555;
+  font-size: 0.65rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.hud-value {
+  color: var(--green);
+  font-size: 1.6rem;
+  font-weight: bold;
+  line-height: 1;
+  margin-bottom: 10px;
+  text-shadow: 0 0 8px var(--green);
+}
+
+#hudCenter {
+  text-align: center;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  padding: 10px 20px;
+  border-radius: 4px;
+}
+
+.hud-gun-name {
+  color: var(--yellow);
+  font-size: 1rem;
+  letter-spacing: 4px;
+  text-shadow: 0 0 8px var(--yellow);
+  margin-bottom: 2px;
+}
+
+.hud-ammo {
+  color: #ff8800;
+  font-size: 1.4rem;
+  margin-bottom: 8px;
+}
+
+.gun-bar {
+  display: flex; gap: 6px;
+}
+
+.gun-slot {
+  width: 34px; height: 28px;
+  border: 1px solid #333;
+  color: #444;
+  font-size: 0.6rem;
+  letter-spacing: 1px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 2px;
+  transition: all 0.2s;
+}
+
+.gun-slot.active {
+  border-color: var(--yellow);
+  color: var(--yellow);
+  background: rgba(255,220,0,0.1);
+  box-shadow: 0 0 8px rgba(255,220,0,0.3);
+}
+
+/* Health bar */
+.health-bar-wrap {
+  width: 100%; height: 8px;
+  background: #1a0000;
+  border: 1px solid #330000;
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 4px 0;
+}
+
+.health-bar {
+  height: 100%; width: 100%;
+  background: linear-gradient(90deg, var(--blood-dark), var(--blood));
+  border-radius: 4px;
+  transition: width 0.3s ease;
+  box-shadow: 0 0 6px var(--blood);
+}
+
+#gestureStatus {
+  font-size: 0.6rem;
+  letter-spacing: 2px;
+  margin-top: 6px;
+  color: #ff8800;
+}
+
+/* ══════════════════════════════════════════════════════════
+   WAVE ANNOUNCE
+══════════════════════════════════════════════════════════ */
+#waveAnnounce {
+  position: fixed;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 50;
+  pointer-events: none;
+}
+
+#waveText {
+  font-family: var(--font-horror);
+  font-size: clamp(3rem, 8vw, 5rem);
+  color: var(--blood);
+  text-shadow: 0 0 40px var(--blood), 0 0 80px #330000;
+  letter-spacing: 8px;
+  animation: waveIn 2.5s forwards;
+}
+
+/* ══════════════════════════════════════════════════════════
+   ANIMATIONS
+══════════════════════════════════════════════════════════ */
+@keyframes flicker {
+  0%, 95%, 100% { opacity: 1; }
+  96%            { opacity: 0.6; }
+  97%            { opacity: 1; }
+  98%            { opacity: 0.3; }
+  99%            { opacity: 1; }
+}
+
+@keyframes pulse-blood {
+  0%, 100% { text-shadow: 0 0 40px var(--blood); transform: scale(1); }
+  50%       { text-shadow: 0 0 80px var(--blood), 0 0 120px #880000; transform: scale(1.03); }
+}
+
+@keyframes waveIn {
+  0%   { opacity: 0; transform: scale(0.5); }
+  20%  { opacity: 1; transform: scale(1.1); }
+  70%  { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.3); }
+}
+
+/* ══════════════════════════════════════════════════════════
+   SCANLINE OVERLAY
+══════════════════════════════════════════════════════════ */
+body::after {
+  content: '';
+  position: fixed; inset: 0; z-index: 200;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.07) 2px,
+    rgba(0,0,0,0.07) 4px
+  );
+  pointer-events: none;
+}

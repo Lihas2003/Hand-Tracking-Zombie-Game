@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>☠ DEAD HANDS — Zombie Shooter</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1646424915/hands.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils@0.3.1640029074/camera_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils@0.3.1620248257/drawing_utils.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+  <div id="loadingScreen">
+    <div class="load-content">
+      <h1 class="load-title">☠ DEAD HANDS</h1>
+      <p class="load-sub">Initialising hand tracking…</p>
+      <div class="load-bar-wrap"><div class="load-bar" id="loadBar"></div></div>
+      <p class="load-tip" id="loadTip">Requesting webcam access…</p>
+    </div>
+  </div>
+
+  <div id="startScreen" class="hidden">
+    <div class="start-content">
+      <h1 class="game-title">☠ DEAD HANDS</h1>
+      <p class="game-subtitle">Hand Tracking Zombie Shooter</p>
+      <div class="gesture-guide">
+        <h3>GESTURE CONTROLS</h3>
+        <div class="gesture-grid">
+          <div class="gesture-item">
+            <span class="gesture-icon">☝️</span>
+            <span>Index Up + Others Curled<br/><b>= GUN POSE (AIM)</b></span>
+          </div>
+          <div class="gesture-item">
+            <span class="gesture-icon">🔥</span>
+            <span>Keep Gun Pose<br/><b>= AUTO SHOOT</b></span>
+          </div>
+          <div class="gesture-item">
+            <span class="gesture-icon">✌️</span>
+            <span>Two Fingers Up<br/><b>= SWITCH GUN</b></span>
+          </div>
+          <div class="gesture-item">
+            <span class="gesture-icon">🖐️</span>
+            <span>Open Palm<br/><b>= RELOAD</b></span>
+          </div>
+        </div>
+      </div>
+      <button id="startBtn" class="start-btn">ENTER THE DEAD ZONE</button>
+      <p class="cam-note">⚠ Webcam required — allow camera access when prompted</p>
+    </div>
+  </div>
+
+  <div id="gameOverScreen" class="hidden">
+    <div class="gameover-content">
+      <h1 class="gameover-title">YOU DIED</h1>
+      <p class="gameover-score">SCORE: <span id="finalScore">0</span></p>
+      <p class="gameover-wave">WAVE REACHED: <span id="finalWave">0</span></p>
+      <button id="restartBtn" class="start-btn">RISE AGAIN</button>
+    </div>
+  </div>
+
+  <canvas id="gameCanvas"></canvas>
+
+  <video id="webcam" playsinline autoplay muted></video>
+
+  <div id="hud" class="hidden">
+    <div id="hudLeft">
+      <div class="hud-label">SCORE</div>
+      <div class="hud-value" id="hudScore">0</div>
+      <div class="hud-label">WAVE</div>
+      <div class="hud-value" id="hudWave">1</div>
+    </div>
+    <div id="hudCenter">
+      <div class="hud-gun-name" id="hudGunName">PISTOL</div>
+      <div class="hud-ammo" id="hudAmmo">∞</div>
+      <div class="gun-bar" id="gunBar">
+        <div class="gun-slot active" data-gun="PISTOL">P</div>
+        <div class="gun-slot" data-gun="SHOTGUN">SG</div>
+        <div class="gun-slot" data-gun="MACHINE_GUN">MG</div>
+        <div class="gun-slot" data-gun="SNIPER">SN</div>
+        <div class="gun-slot" data-gun="ROCKET">RL</div>
+      </div>
+    </div>
+    <div id="hudRight">
+      <div class="hud-label">HEALTH</div>
+      <div class="health-bar-wrap">
+        <div class="health-bar" id="healthBar"></div>
+      </div>
+      <div class="hud-value" id="hudHealth">100</div>
+      <div class="hud-label" id="gestureStatus">NO HAND</div>
+    </div>
+  </div>
+
+  <div id="waveAnnounce" class="hidden">
+    <span id="waveText">WAVE 1</span>
+  </div>
+
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>

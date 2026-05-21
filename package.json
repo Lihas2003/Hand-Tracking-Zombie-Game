@@ -1,0 +1,17 @@
+{
+  "name": "zombie-shooter",
+  "version": "1.0.0",
+  "description": "Hand tracking zombie shooter game using MediaPipe",
+  "main": "src/main.js",
+  "type": "module",
+  "scripts": {
+    "dev": "npx live-server --port=3000 --open=index.html",
+    "start": "npx live-server --port=3000 --open=index.html"
+  },
+  "keywords": ["game", "hand-tracking", "mediapipe", "zombie", "shooter"],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  }
+}
